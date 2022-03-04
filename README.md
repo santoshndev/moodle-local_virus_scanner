@@ -21,6 +21,7 @@ Web profile: https://santoshnagargoje.in/
 # #Installation:
 
 You can download the plugin from moodle plugin directory
+- install clamscan and update virus database on your web server (it's must otherwise plugin will not work)
 
 ###### Ensure you have the version of Moodle as stated above in 'Required version of Moodle'.  
  
