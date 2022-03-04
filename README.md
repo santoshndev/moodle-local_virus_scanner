@@ -3,7 +3,7 @@
 This plugin can be used to scan the uploaded assignment files.
 
 # #Features
-=============
+
   #### #1. Scan uploaded assignment files daily
   - This plugin will scan the uploaded assignment submission files daily.
   #### #2. Send virus scan report mail
@@ -13,14 +13,12 @@ This plugin can be used to scan the uploaded assignment files.
   
 
 # #Original Author
-===============
 
 Author: Santosh Nagargoje 
 
 Web profile: https://santoshnagargoje.in/
 
 # #Installation:
-=============
 
 You can download the plugin from moodle plugin directory
 
