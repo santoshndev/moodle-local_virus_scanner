@@ -25,6 +25,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_virus_scanner';
 $plugin->release = '1.0.0';
-$plugin->version = 2022022400;
+$plugin->version = 2022022401;
 $plugin->requires = 2018120300;
 $plugin->maturity = MATURITY_STABLE;
