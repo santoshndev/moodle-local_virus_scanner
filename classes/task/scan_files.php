@@ -21,8 +21,8 @@
  * @copyright   2022 Santosh N. <santosh.nag2217@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace local_virus_scanner\task;
 
+namespace local_virus_scanner\task;
 
 class scan_files extends \core\task\scheduled_task {
 
@@ -39,11 +39,21 @@ class scan_files extends \core\task\scheduled_task {
     public function execute() {
         global $CFG, $DB;
 
-        $select = "filearea = :smfile AND filename <> :fname";
-        $select .= " AND (FROM_UNIXTIME(timecreated, '%Y-%m-%d') = :yesterday1";
-        $select .= " OR FROM_UNIXTIME(timemodified, '%Y-%m-%d') = :yesterday2)";
-        $params = ['smfile' => 'submission_files', 'fname' => '.',
-            'yesterday1' => 'DATE_SUB(CURDATE(), INTERVAL 1 DAY)', 'yesterday2' => 'DATE_SUB(CURDATE(), INTERVAL 1 DAY)'];
+        $yesterday = time() - 60 * 60 * 24;   //get yesterday
+        $today = time();  //get today
+
+        $select = $DB->sql_equal('filearea', ':smfile') . " AND " . $DB->sql_equal('filename', ':fname', true, true, true);
+        $select .= " AND (timecreated < :today AND timecreated > :yesterday)";
+        $select .= " OR (timemodified < :today1 AND timemodified > :yesterday1)";
+        $params = [
+                'smfile' => 'submission_files',
+                'fname' => '.',
+                'today' => $today,
+                'yesterday' => $yesterday,
+                'today1' => $today,
+                'yesterday1' => $yesterday
+        ];
+        //Get the list of files uploaded yesterday
         $files = $DB->get_records_select('files', $select, $params);
         $data = array();
         $data[] = ['filename', 'filepath', 'uploadedby', 'filetype', 'uploadedon'];
@@ -52,9 +62,9 @@ class scan_files extends \core\task\scheduled_task {
             $chash = $filee->contenthash;
             $parent = substr($chash, 0, 2);
             $child = substr($chash, 2, 2);
-            $filepath = $CFG->dataroot.'/filedir/'.$parent.'/'.$child.'/'.$chash;
+            $filepath = $CFG->dataroot . '/filedir/' . $parent . '/' . $child . '/' . $chash;
 
-            $cmd = 'clamscan '.$filepath;
+            $cmd = get_config('local_virus_scanner', 'clamav') . ' ' . $filepath;
 
             exec($cmd, $output, $return);
 
@@ -65,9 +75,9 @@ class scan_files extends \core\task\scheduled_task {
         }
         // Create csv file of infected file details.
         $dirname = get_config('local_virus_scanner', 'directory');
-        $filename = 'virus_infection_report_'.userdate(time(), '%Y%m%d').'.csv';
+        $filename = 'virus_infection_report_' . userdate(time(), '%Y%m%d') . '.csv';
         $filepath1 = $CFG->dataroot;
-        $filelocation = $filepath1.'/'.$dirname.'/'.$filename;
+        $filelocation = $filepath1 . '/' . $dirname . '/' . $filename;
         // Open csv file for writing.
         $f = fopen($filelocation, 'w');
 
@@ -96,7 +106,7 @@ class scan_files extends \core\task\scheduled_task {
             $messagetext = get_string('messagetext', 'local_virus_scanner');
             $messagehtml = get_string('messagehtml', 'local_virus_scanner');
             if (email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, $filelocation, $filename)) {
-                mtrace("virus scan report mail sent to ".$touser->email.' successfully');
+                mtrace("virus scan report mail sent to " . $touser->email . ' successfully');
             }
         } else {
             mtrace('no virus detected');
