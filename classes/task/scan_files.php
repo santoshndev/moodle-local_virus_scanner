@@ -77,6 +77,10 @@ class scan_files extends \core\task\scheduled_task {
         $dirname = get_config('local_virus_scanner', 'directory');
         $filename = 'virus_infection_report_' . userdate(time(), '%Y%m%d') . '.csv';
         $filepath1 = $CFG->dataroot;
+        //create folder if does not exists on dataroot
+        if(!file_exists($filepath1.'/'.$dirname)){
+            mkdir($filepath1.'/'.$dirname);
+        }
         $filelocation = $filepath1 . '/' . $dirname . '/' . $filename;
         // Open csv file for writing.
         $f = fopen($filelocation, 'w');
