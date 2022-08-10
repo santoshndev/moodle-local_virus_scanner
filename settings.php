@@ -25,23 +25,31 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $ADMIN->add('localplugins', new admin_category('local_virus_scanner_settings', new lang_string('pluginname', 'local_virus_scanner')));
+
+    $ADMIN->add('localplugins', new admin_category('local_virus_scanner_settings',
+        new lang_string('pluginname', 'local_virus_scanner')));
     $settingspage = new admin_settingpage('managelocalvirusscanner', new lang_string('manage', 'local_virus_scanner'));
 
     if ($ADMIN->fulltree) {
 
-        //directory to save scanner report file
+        // Path to clamav.
+        $settingspage->add(new admin_setting_configtext('local_virus_scanner/clamav',
+                get_string('clamav', 'local_virus_scanner'),
+                get_string('configclamav', 'local_virus_scanner'),
+                '', PARAM_TEXT));
+
+        // Directory to save scanner report file.
         $settingspage->add(new admin_setting_configtext('local_virus_scanner/directory',
             get_string('directory', 'local_virus_scanner'),
             get_string('configdirectory', 'local_virus_scanner'),
             '', PARAM_TEXT));
 
-        //Enable/Disable Mail Sending
+        // Enable/Disable Mail Sending.
         $settingspage->add(new admin_setting_configcheckbox('local_virus_scanner/sendmail',
             get_string('sendmail', 'local_virus_scanner'),
             get_string('configsendmail', 'local_virus_scanner'), 1));
 
-        //Send mail to this mail id
+        // Send mail to this mail id.
         $settingspage->add(new admin_setting_configtext('local_virus_scanner/mailid',
             get_string('mailid', 'local_virus_scanner'),
             get_string('configmailid', 'local_virus_scanner'), '', PARAM_EMAIL));
