@@ -13,6 +13,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+namespace local_virus_scanner\task;
 /**
  * Scheduled Task
  *
@@ -21,9 +23,6 @@
  * @copyright   2022 Santosh N. <santosh.nag2217@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_virus_scanner\task;
-
 class scan_files extends \core\task\scheduled_task {
 
     /**
@@ -39,8 +38,8 @@ class scan_files extends \core\task\scheduled_task {
     public function execute() {
         global $CFG, $DB;
 
-        $yesterday = time() - 60 * 60 * 24;   //get yesterday
-        $today = time();  //get today
+        $yesterday = time() - 60 * 60 * 24;   // Get yesterday.
+        $today = time();  // Get today.
 
         $select = $DB->sql_equal('filearea', ':smfile') . " AND " . $DB->sql_equal('filename', ':fname', true, true, true);
         $select .= " AND (timecreated < :today AND timecreated > :yesterday)";
@@ -51,11 +50,11 @@ class scan_files extends \core\task\scheduled_task {
                 'today' => $today,
                 'yesterday' => $yesterday,
                 'today1' => $today,
-                'yesterday1' => $yesterday
+                'yesterday1' => $yesterday,
         ];
-        //Get the list of files uploaded yesterday
+        // Get the list of files uploaded yesterday.
         $files = $DB->get_records_select('files', $select, $params);
-        $data = array();
+        $data = [];
         $data[] = ['filename', 'filepath', 'uploadedby', 'filetype', 'uploadedon'];
         // Scan each and every file.
         foreach ($files as $filee) {
@@ -77,8 +76,8 @@ class scan_files extends \core\task\scheduled_task {
         $dirname = get_config('local_virus_scanner', 'directory');
         $filename = 'virus_infection_report_' . userdate(time(), '%Y%m%d') . '.csv';
         $filepath1 = $CFG->dataroot . '/temp';
-        //create folder if does not exists on dataroot
-        if(!file_exists($filepath1.'/'.$dirname)){
+        // Create folder if does not exists on dataroot.
+        if (!file_exists($filepath1.'/'.$dirname)) {
             mkdir($filepath1.'/'.$dirname);
         }
         $filelocation = $filepath1 . '/' . $dirname . '/' . $filename;
@@ -118,3 +117,4 @@ class scan_files extends \core\task\scheduled_task {
 
     }
 }
+
