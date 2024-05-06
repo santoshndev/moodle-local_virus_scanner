@@ -36,4 +36,4 @@ $string['mailsubject'] = '[{$a}] Virus Scan Report';
 $string['messagetext'] = 'Dear Admin, Please find the attachment of virus scanner report';
 $string['messagehtml'] = '<p><b>Dear Admin,</b><br/> Please find the attachment of virus scanner report file. </p>';
 $string['manage'] = 'Virus Scanner';
-$string['virus_scanner:view'] = 'View Virus Scanner';
+$string['privacy:metadata'] = 'The Virus Scanner plugin only shows data stored in other locations.';

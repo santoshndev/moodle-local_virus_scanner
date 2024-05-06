@@ -5,7 +5,8 @@ This plugin can be used to scan the uploaded assignment files.
 # #Features
 
   #### #1. Scan uploaded assignment files daily
-  - This plugin will scan the uploaded assignment submission files daily.
+  - This plugin scans files using clamscan that are contained within the "submission_files" area of moodle assignments uploaded in the last 24 hours.
+  It does not quarantine or remove files. It does not scan "all" files uploaded to Moodle.
   #### #2. Send virus scan report mail
   - This plugin will send the mail to the specified mail id only if the virus is detected.
   #### #3. Help to reduce cpu utilization by scheduling the task at specified time

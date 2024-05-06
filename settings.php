@@ -33,7 +33,7 @@ if ($hassiteconfig) {
     if ($ADMIN->fulltree) {
 
         // Path to clamav.
-        $settingspage->add(new admin_setting_configtext('local_virus_scanner/clamav',
+        $settingspage->add(new admin_setting_configexecutable('local_virus_scanner/clamav',
                 get_string('clamav', 'local_virus_scanner'),
                 get_string('configclamav', 'local_virus_scanner'),
                 '', PARAM_TEXT));
